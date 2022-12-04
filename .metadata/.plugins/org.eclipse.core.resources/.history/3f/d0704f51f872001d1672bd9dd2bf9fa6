@@ -1,0 +1,120 @@
+package BusinessLayer;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import DataAccessLayer.DataAccessClass;
+import TransferObjects.DatabaseData;
+
+/**
+ * 
+ * @author usama
+ *
+ */
+public class BusinessClass 
+{
+	static int count = 0;
+	public String chosenFile;
+	
+	public void setFilePath(String chosenFile) throws SQLException
+	{
+		this.chosenFile = chosenFile;
+		chooseFile();
+	}
+	
+	/**
+	 * @author usama
+	 * @param chosenFile
+	 * @throws SQLException
+	 */
+	public void chooseFile() throws SQLException
+	{
+		
+		
+		if(chosenFile.equals("D:\\SCD Project\\Files\\Mafoul.csv"))
+		{
+			new DataAccessClass().addingColumn(1);
+			new DataAccessClass().mafoulInsert(chosenFile);
+			count++;
+		}
+		else if(chosenFile.equals("D:\\SCD Project\\Files\\Masdar.csv"))
+		{
+			new DataAccessClass().addingColumn(2);
+			new DataAccessClass().masdarInsert(chosenFile);
+			count++;
+		}
+		else if(chosenFile.equals("D:\\SCD Project\\Files\\Faeel.csv"))
+		{
+			new DataAccessClass().addingColumn(3);
+			new DataAccessClass().faeelInsert(chosenFile);
+			count++;
+		}
+		else
+		{
+			System.out.println("Wrong File Chosen..");
+		}
+		uploadAsalTable();
+	}
+	
+	/**
+	 * @author usama
+	 */
+	public void uploadAsalTable()
+	{
+		if(count == 3)
+		{
+			new DataAccessClass().asalInsert();
+		}
+		else
+		{
+			System.out.println("Others Files not uploaded..");
+		}
+	}
+	
+	/**
+	 * @author usama
+	 * @param sizeMafoulArray
+	 * @param sizeFaeelArray
+	 * @param sizeMasdarArray
+	 * @return
+	 */
+	public int maxReturn(int sizeMafoulArray, int sizeFaeelArray, int sizeMasdarArray)
+	{
+		int max = 0;
+		if(sizeMafoulArray < sizeFaeelArray)
+        {
+        	if(sizeMafoulArray < sizeMasdarArray)
+        	{
+        		max = sizeMafoulArray;
+        	}
+        	else
+        	{
+        		max = sizeMasdarArray;
+        	}
+        }
+        else if(sizeFaeelArray < sizeMasdarArray)
+        {
+        	max = sizeFaeelArray;
+        }
+        else
+        {
+        	max = sizeMasdarArray;
+        }
+		return max;
+	}
+	
+	/**
+	 * @author usama
+	 * @param str
+	 * @return
+	 * @throws SQLException
+	 */
+	public static ArrayList<DatabaseData> getRow(String str) throws SQLException {
+		ArrayList<DatabaseData> word = null;
+		try {
+			word = DataAccessClass.jTableInsert(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return word;
+	}
+}
